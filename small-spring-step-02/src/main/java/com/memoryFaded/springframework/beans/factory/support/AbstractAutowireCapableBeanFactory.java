@@ -19,4 +19,11 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         addSingleton(beanName,bean);
         return bean;
     }
+
+    public static void main(String[] args) {
+        BigDecimal a = new BigDecimal(10);
+        BigDecimal b = new BigDecimal("2840.02").setScale(2,RoundingMode.HALF_UP);
+        System.out.println("b = "+ b.doubleValue());
+        System.out.println(a.divide(b).doubleValue());
+    }
 }
