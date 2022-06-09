@@ -1,8 +1,9 @@
 package com.mermoryFaded.springframework.beans.factory;
 
-import com.memoryFaded.springframework.beans.BeansException;
-import com.memoryFaded.springframework.beans.factory.config.BeanDefinition;
-import com.memoryFaded.springframework.beans.factory.config.BeanPostProcessor;
+
+import com.mermoryFaded.springframework.beans.BeansException;
+import com.mermoryFaded.springframework.beans.factory.config.BeanDefinition;
+import com.mermoryFaded.springframework.beans.factory.config.BeanPostProcessor;
 
 public interface ConfigurableListableBeanFactory  {
     BeanDefinition getBeanDefinition(String beanName) throws BeansException;

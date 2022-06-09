@@ -1,6 +1,8 @@
-package com.mermoryFaded.springframework.beans.factory.config;
+package com.memoryFaded.springframework.beans.factory.config;
 
-import com.mermoryFaded.springframework.beans.BeansException;
+import com.memoryFaded.springframework.beans.BeansException;
+
+import java.beans.Beans;
 
 public interface BeanPostProcessor {
     /**
