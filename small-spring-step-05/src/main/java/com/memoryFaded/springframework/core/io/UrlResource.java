@@ -4,9 +4,7 @@ import cn.hutool.core.lang.Assert;
 
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.URL;
-import java.net.URLConnection;
+import java.net.*;
 
 public class UrlResource implements Resource{
     private final URL url;
@@ -18,13 +16,15 @@ public class UrlResource implements Resource{
 
     @Override
     public InputStream getInputStream() throws IOException {
-        URLConnection con = this.url.openConnection();
+        Proxy proxy = new Proxy(Proxy.Type.HTTP,new InetSocketAddress("172.24.48.1",7890));
+        URLConnection urlConnection = this.url.openConnection(proxy);
+
         try {
-            return con.getInputStream();
+            return urlConnection.getInputStream();
         }
         catch (IOException e){
-            if (con instanceof HttpURLConnection){
-                ((HttpURLConnection) con).disconnect();
+            if (urlConnection instanceof HttpURLConnection){
+                ((HttpURLConnection) urlConnection).disconnect();
             }
             throw e;
         }

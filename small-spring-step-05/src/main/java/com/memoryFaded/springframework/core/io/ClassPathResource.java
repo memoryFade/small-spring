@@ -1,6 +1,8 @@
 package com.memoryFaded.springframework.core.io;
 
 import cn.hutool.core.lang.Assert;
+import cn.hutool.core.util.ClassUtil;
+import com.memoryFaded.springframework.util.ClassUtils;
 
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -17,7 +19,7 @@ public class ClassPathResource implements Resource{
     public ClassPathResource(String path, ClassLoader classLoader) {
         Assert.notNull(path,"Path must not be null");
         this.path = path;
-        this.classLoader = classLoader;
+        this.classLoader = classLoader!=null?classLoader: ClassUtils.getDefaultClassLoader();
     }
 
     @Override
