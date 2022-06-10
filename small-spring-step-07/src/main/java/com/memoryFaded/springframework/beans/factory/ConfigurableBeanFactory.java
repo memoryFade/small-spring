@@ -8,5 +8,6 @@ public interface ConfigurableBeanFactory  extends HierarchicalBeanFactory{
 
     void addBeanPostProcessor(BeanPostProcessor beanPostProcessor);
 
+    void destroySingletons();
 
 }

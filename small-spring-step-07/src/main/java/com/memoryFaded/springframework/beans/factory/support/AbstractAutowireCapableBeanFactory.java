@@ -5,6 +5,7 @@ import cn.hutool.core.util.StrUtil;
 import com.memoryFaded.springframework.beans.BeansException;
 import com.memoryFaded.springframework.beans.PropertyValue;
 import com.memoryFaded.springframework.beans.PropertyValues;
+import com.memoryFaded.springframework.beans.factory.DisposableBean;
 import com.memoryFaded.springframework.beans.factory.InitializingBean;
 import com.memoryFaded.springframework.beans.factory.config.AutowireCapalbeBeanFactory;
 import com.memoryFaded.springframework.beans.factory.config.BeanDefinition;
@@ -35,10 +36,17 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
             throw new BeansException("Instantiation of bean failed", e);
         }
 
-        //...
+        //注册实现了DisposableBean 接口的Bean 对象
+        registerDisposableBeanIfNecessary(beanName, bean, beanDefinition);
 
         addSingleton(beanName, bean);
         return bean;
+    }
+
+    private void registerDisposableBeanIfNecessary(String beanName, Object bean, BeanDefinition beanDefinition) {
+        if (bean instanceof DisposableBean || StrUtil.isNotEmpty(beanDefinition.getDestroyMethodName())) {
+            registerDisposableBean(beanName, new DisposableBeanAdapter(bean, beanName, beanDefinition));
+        }
     }
 
     private Object initializeBean(String beanName, Object bean, BeanDefinition beanDefinition) {
