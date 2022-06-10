@@ -17,13 +17,13 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
     private InstantiationStrategy instantiationStrategy = new CglibSubclassingInstantiationStrategy();
 
     @Override
-    protected Object createBean(String beanName, BeanDefinition beanDefinition,Object[] args) {
+    protected Object createBean(String beanName, BeanDefinition beanDefinition, Object[] args) {
         Object bean = null;
         try {
-            bean = createBeanInstance(beanDefinition,beanName,args);
-            applyPropertyValues(beanName,bean,beanDefinition);
+            bean = createBeanInstance(beanDefinition, beanName, args);
+            applyPropertyValues(beanName, bean, beanDefinition);
 
-            bean = initializeBean(beanName,bean,beanDefinition);
+            bean = initializeBean(beanName, bean, beanDefinition);
         } catch (Exception e) {
             throw new BeansException("Instantiation of bean failed", e);
         }
@@ -36,13 +36,31 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         return null;
     }
 
+
+    @Override
+    public Object applyBeanPostProcessorsBeforeInitialization(Object existingBean, String beanName) throws BeansException {
+        Object result = existingBean;
+        for (BeanPostProcessor processor : getBeanPostProcessors()) {
+            Object current = processor.postProcessBeforeInitialization(result, beanName);
+            if (null == current){
+                return result;
+            }
+            result = current;
+        }
+        return result;
+    }
+
     @Override
     public Object applyBeanPostProcessorsAfterInitialization(Object existingBean, String beanName) throws BeansException {
         Object result = existingBean;
-        for (BeanPostProcessor processor:getBeanPostProcessors()) {
-
+        for (BeanPostProcessor processor : getBeanPostProcessors()) {
+            Object current = processor.postProcessAfterInitialization(result, beanName);
+            if (null == current){
+                return result;
+            }
+            result = current;
         }
-
+        return result;
     }
 
     protected Object createBeanInstance(BeanDefinition beanDefinition, String beanName, Object[] args) {
@@ -51,12 +69,12 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
         Constructor<?>[] declaredConstructors = beanClass.getDeclaredConstructors();
 
         for (Constructor<?> ctor : declaredConstructors) {
-            if (null != args&&ctor.getParameterTypes().length==args.length){
+            if (null != args && ctor.getParameterTypes().length == args.length) {
                 constructorToUse = ctor;
                 break;
             }
         }
-        return getInstantiationStrategy().instantiate(beanDefinition,beanName,constructorToUse,args);
+        return getInstantiationStrategy().instantiate(beanDefinition, beanName, constructorToUse, args);
     }
 
     private void applyPropertyValues(String beanName, Object bean, BeanDefinition beanDefinition) {
@@ -70,9 +88,10 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
                 value = getBean(beanReference.getBeanName());
             }
 
-            BeanUtil.setFieldValue(bean,name,value);
+            BeanUtil.setFieldValue(bean, name, value);
         }
     }
+
     public InstantiationStrategy getInstantiationStrategy() {
         return instantiationStrategy;
     }
