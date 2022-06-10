@@ -20,9 +20,13 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
     protected Object createBean(String beanName, BeanDefinition beanDefinition, Object[] args) {
         Object bean = null;
         try {
+            //创建Bean的实例
             bean = createBeanInstance(beanDefinition, beanName, args);
+
+            //给Bean填充属性
             applyPropertyValues(beanName, bean, beanDefinition);
 
+            //执行Bean的初始化方法和BeanPostProcessor的前置后置方法
             bean = initializeBean(beanName, bean, beanDefinition);
         } catch (Exception e) {
             throw new BeansException("Instantiation of bean failed", e);
