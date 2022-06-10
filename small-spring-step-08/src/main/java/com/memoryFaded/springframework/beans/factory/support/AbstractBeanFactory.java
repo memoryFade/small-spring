@@ -4,11 +4,17 @@ import com.memoryFaded.springframework.beans.BeansException;
 import com.memoryFaded.springframework.beans.factory.ConfigurableBeanFactory;
 import com.memoryFaded.springframework.beans.factory.config.BeanDefinition;
 import com.memoryFaded.springframework.beans.factory.config.BeanPostProcessor;
+import com.memoryFaded.springframework.util.ClassUtils;
 
 import java.util.ArrayList;
 import java.util.List;
 
 public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry implements ConfigurableBeanFactory {
+
+    /**
+     * ClassLoader to resolve bean class names with, if necessary
+     */
+    private ClassLoader beanClassLoader = ClassUtils.getDefaultClassLoader();
 
     /**
      *  BeanPostProcessors to apply in createBean
@@ -54,5 +60,9 @@ public abstract class AbstractBeanFactory extends DefaultSingletonBeanRegistry i
     public void addBeanPostProcessor(BeanPostProcessor beanPostProcessor) {
         this.beanPostProcessors.remove(beanPostProcessor);
         this.beanPostProcessors.add(beanPostProcessor);
+    }
+
+    public ClassLoader getBeanClassLoader() {
+        return this.beanClassLoader;
     }
 }
