@@ -1,4 +1,4 @@
-package com.memoryFade.springframework;
+package com.memoryFaded.springframework;
 
 public class BeanDefinition {
     private Object bean;

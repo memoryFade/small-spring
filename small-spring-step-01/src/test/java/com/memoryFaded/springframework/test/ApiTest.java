@@ -1,8 +1,8 @@
 package com.memoryFaded.springframework.test;
 
 
-import com.memoryFade.springframework.BeanDefinition;
-import com.memoryFade.springframework.BeanFactory;
+import com.memoryFaded.springframework.BeanDefinition;
+import com.memoryFaded.springframework.BeanFactory;
 import com.memoryFaded.springframework.test.bean.UserService;
 import org.junit.Test;
 

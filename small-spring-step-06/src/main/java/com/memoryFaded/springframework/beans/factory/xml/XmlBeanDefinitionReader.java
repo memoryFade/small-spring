@@ -52,7 +52,12 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
         loadBeanDefinitions(resource);
     }
 
-
+    @Override
+    public void loadBeanDefinitions(String... locations) throws BeansException {
+        for (String location : locations) {
+            loadBeanDefinitions(location);
+        }
+    }
 
     protected void doLoadBeanDefinitions(InputStream inputStream) throws ClassNotFoundException{
         Document doc = XmlUtil.readXML(inputStream);
@@ -95,6 +100,7 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
                 PropertyValue propertyValue = new PropertyValue(attrName, value);
                 beanDefinition.getPropertyValues().addPropertyValue(propertyValue);
             }
+
             if (getRegistry().containsBeanDefinition(beanName)) {
                 throw new BeansException("Duplicate beanName["+beanName+"] is not allowed");
             }

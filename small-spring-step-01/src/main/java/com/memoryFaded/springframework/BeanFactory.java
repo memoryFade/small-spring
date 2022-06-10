@@ -1,4 +1,4 @@
-package com.memoryFade.springframework;
+package com.memoryFaded.springframework;
 
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;

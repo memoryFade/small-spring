@@ -7,14 +7,16 @@ import com.memoryFaded.springframework.beans.factory.config.BeanPostProcessor;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.concurrent.ConcurrentHashMap;
+import java.util.concurrent.ConcurrentMap;
 
 public class DefaultListableBeanFactory extends AbstractAutowireCapableBeanFactory implements BeanDefinitionRegistry , ConfigurableListableBeanFactory {
 
-    private Map<String,BeanDefinition> beanDefinitionMap = new HashMap<>();
+    private Map<String,BeanDefinition> beanDefinitionMap = new ConcurrentHashMap<String, BeanDefinition>();
 
     @Override
     public void registerBeanDefinition(String beanName, BeanDefinition beanDefinition) {
-            beanDefinitionMap.put(beanName, beanDefinition);
+        beanDefinitionMap.put(beanName, beanDefinition);
     }
 
     @Override

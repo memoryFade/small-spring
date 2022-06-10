@@ -33,7 +33,13 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
     }
 
     private Object initializeBean(String beanName, Object bean, BeanDefinition beanDefinition) {
-        return null;
+        Object wrappedBean = applyBeanPostProcessorsBeforeInitialization(bean, beanName);
+        invokeInitMethods(beanName,wrappedBean,beanDefinition);
+        wrappedBean = applyBeanPostProcessorsAfterInitialization(bean,beanName);
+        return wrappedBean;
+    }
+    private void invokeInitMethods(String beanName, Object wrappedBean, BeanDefinition beanDefinition) {
+
     }
 
 
