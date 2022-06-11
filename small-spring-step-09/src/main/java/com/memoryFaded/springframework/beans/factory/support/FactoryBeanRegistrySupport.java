@@ -22,8 +22,8 @@ public abstract class FactoryBeanRegistrySupport extends DefaultSingletonBeanReg
                 this.factoryBeanObjectCache.put(beanName, (object != null ? object : NULL_OBJECT));
             }
             return object != NULL_OBJECT ? object : null;
-        } else{
-            return doGetObjectFromFactoryBean(factory,beanName);
+        } else {
+            return doGetObjectFromFactoryBean(factory, beanName);
         }
     }
 

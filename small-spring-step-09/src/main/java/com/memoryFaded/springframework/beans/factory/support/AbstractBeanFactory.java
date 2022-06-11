@@ -2,7 +2,6 @@ package com.memoryFaded.springframework.beans.factory.support;
 
 import com.memoryFaded.springframework.beans.BeansException;
 import com.memoryFaded.springframework.beans.factory.ConfigurableBeanFactory;
-import com.memoryFaded.springframework.beans.factory.FactoryBean;
 import com.memoryFaded.springframework.beans.factory.config.BeanDefinition;
 import com.memoryFaded.springframework.beans.factory.config.BeanPostProcessor;
 import com.memoryFaded.springframework.util.ClassUtils;
@@ -37,29 +36,12 @@ public abstract class AbstractBeanFactory extends FactoryBeanRegistrySupport imp
     }
 
     protected <T> T doGetBean(final String name, final Object[] args) {
-        Object sharedInstance = getSingleton(name);
-        if (sharedInstance != null) {
-            return (T) getObjectForBeanInstance(sharedInstance,name);
+        Object bean = getSingleton(name);
+        if (bean != null) {
+            return (T) bean;
         }
-
         BeanDefinition beanDefinition = getBeanDefinition(name);
-        Object bean = createBean(name, beanDefinition, args);
-        return (T) getObjectForBeanInstance(bean,name);
-    }
-
-    private Object getObjectForBeanInstance(Object beanInstance, String beanName) {
-        if (!(beanInstance instanceof FactoryBean)){
-            return beanInstance;
-        }
-
-        Object object = getCacheObjectForFactoryBean(beanName);
-
-        if (object ==null ){
-            FactoryBean<?> factoryBean = (FactoryBean<?>) beanInstance;
-            object = getObjectFromFactoryBean(factoryBean,beanName);
-        }
-
-        return object;
+        return (T) createBean(name, beanDefinition, args);
     }
 
     protected abstract BeanDefinition getBeanDefinition(String beanName) throws BeansException;
