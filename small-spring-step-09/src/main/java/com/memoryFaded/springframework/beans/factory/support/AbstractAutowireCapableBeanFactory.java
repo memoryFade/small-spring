@@ -37,6 +37,8 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
 
         //注册实现了DisposableBean 接口的Bean 对象
         registerDisposableBeanIfNecessary(beanName, bean, beanDefinition);
+
+        // 判断 SCOPE_SINGLETON、SCOPE_PROTOTYPE
         if (beanDefinition.isSingleton()){
             addSingleton(beanName, bean);
         }
@@ -143,18 +145,24 @@ public abstract class AbstractAutowireCapableBeanFactory extends AbstractBeanFac
     }
 
     private void applyPropertyValues(String beanName, Object bean, BeanDefinition beanDefinition) {
-        PropertyValues propertyValues = beanDefinition.getPropertyValues();
-        for (PropertyValue propertyValue : propertyValues.getPropertyValues()) {
-            String name = propertyValue.getName();
-            Object value = propertyValue.getValue();
-            if (value instanceof BeanReference) {
-                // A 依赖 B，获取 B 的实例化
-                BeanReference beanReference = ((BeanReference) value);
-                value = getBean(beanReference.getBeanName());
-            }
+        try {
+            PropertyValues propertyValues = beanDefinition.getPropertyValues();
+            for (PropertyValue propertyValue : propertyValues.getPropertyValues()) {
+                String name = propertyValue.getName();
+                Object value = propertyValue.getValue();
+                if (value instanceof BeanReference) {
+                    // A 依赖 B，获取 B 的实例化
+                    BeanReference beanReference = ((BeanReference) value);
+                    value = getBean(beanReference.getBeanName());
+                }
 
-            BeanUtil.setFieldValue(bean, name, value);
+                BeanUtil.setFieldValue(bean, name, value);
+            }
+        } catch (Exception e){
+            throw new BeansException("Error setting property values：" + beanName,e);
         }
+
+
     }
 
     public InstantiationStrategy getInstantiationStrategy() {

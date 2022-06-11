@@ -89,7 +89,7 @@ public class XmlBeanDefinitionReader extends AbstractBeanDefinitionReader {
             beanDefinition.setInitMethodName(initMethod);
             beanDefinition.setDestroyMethodName(destroyMethodName);
 
-            if(StrUtil.isNotEmpty(beanName)){
+            if(StrUtil.isNotEmpty(beanScope)){
                 beanDefinition.setScope(beanScope);
             }
 
